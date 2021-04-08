@@ -1,18 +1,36 @@
 const path = require("path");
+const htmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    entry: './src/index.js',
+    devtool: "inline-source-map",
+    entry: './src/index.ts',
     output: {
         path: path.resolve(__dirname, 'build'),
-        filename: "build.js"
+        filename: "build.js",
+        clean: true
+    },
+    resolve: {
+        extensions: [".ts", ".tsx", ".js"]
     },
     module: {
         rules: [
             {
-                test: /\.m?js$/,
-                exclude: /(node_modules|bower_components)/,
-                loader: 'babel-loader'
-            }
+                test: /\.tsx?$/,
+                use: 'babel-loader',
+                exclude: /node_modules/,
+            },
         ]
+    },
+    plugins: [
+        new htmlWebpackPlugin({
+            filename: "index.html",
+            template: "src/index.html",
+            hash: true
+        })
+    ],
+    devServer: {
+        port: 3000,
+        open: true,
+        hot: true
     }
 }
